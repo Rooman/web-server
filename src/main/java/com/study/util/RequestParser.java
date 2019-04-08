@@ -30,8 +30,20 @@ public abstract class RequestParser {
     }
 
     static void injectUriAndMethod(Request request, String requestLine) {
+        String[] splittedString = requestLine.split(" ");
+        HttpMethod httpMethod = HttpMethod.getByName(splittedString[0]);
+        request.setHttpMethod(httpMethod);
+        String uri = splittedString[1];
+        request.setUri(uri);
     }
 
     static void injectHeaders(Request request, BufferedReader reader) throws IOException {
+        Map<String, String> headers = new HashMap<>();
+        String line;
+        while (!(line = reader.readLine()).isEmpty()) {
+            String[] splittedString = line.split(": ");
+            headers.put(splittedString[0], splittedString[1]);
+        }
+        request.setHeaders(headers);
     }
 }

@@ -12,7 +12,19 @@ public class ResponseWriter {
     }
 
     public void writeResponse(HttpStatus httpStatus, String body) {
+        byte[] buffer = new byte[8192];
+        try {
+            writer.write(httpStatus.getStatusLine().getBytes());
+            writer.write("\n".getBytes());
+            writer.write("\n".getBytes());
+            if (body != null) {
+                writer.write(body.getBytes());
+            }
+            writer.flush();
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
